@@ -1,0 +1,16 @@
+{
+  "name": "duracotus",
+  "version": "0.1.0",
+  "description": "Orbit calculator with WebGL visualiser",
+  "license": "LGPL-3.0-or-later",
+  "author": "ageuxo",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "build": "esbuild src/main.ts --bundle --outfile=dist/index.js",
+    "dev": "esbuild src/main.ts --bundle --outfile=dist/index.js --watch"
+  },
+  "devDependencies": {
+    "esbuild": "0.27.3"
+  }
+}
