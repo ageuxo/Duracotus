@@ -1,5 +1,5 @@
 import { RenderState } from "../render/render";
-import { SpriteRenderer, SpriteRenderState } from "../render/spriteRender";
+import { SpriteRenderState } from "../render/spriteRender";
 import { Vec } from "./physics";
 
 export interface Entity {
@@ -11,13 +11,14 @@ export interface Entity {
 }
 
 export class SpriteEntity implements Entity {
-  sprite: number;
+  spriteId: number;
   mass: number;
   pos: Vec;
   velocity: Vec;
   hasChanged: boolean;
 
-  constructor(mass: number, pos: Vec, velocity: Vec) {
+  constructor(spriteId: number, mass: number, pos: Vec, velocity: Vec) {
+    this.spriteId = spriteId;
     this.mass = mass;
     this.pos = pos;
     this.velocity = velocity;
@@ -34,7 +35,7 @@ export class SpriteEntity implements Entity {
     return this.velocity;
   }
   getSpriteId() {
-    return this.sprite;
+    return this.spriteId;
   }
   stateNeedsUpdate(): boolean {
     return this.hasChanged;
@@ -42,7 +43,7 @@ export class SpriteEntity implements Entity {
   extractRenderState(): SpriteRenderState {
     return {
       type: "sprite",
-      sprite: this.sprite,
+      sprite: this.spriteId,
       position: this.getPos(),
     }
   }
