@@ -83,12 +83,15 @@ export class SpriteRenderer {
     var gl = renderer.gl;
 
     var positions: number[] = [];
+    var vertices = 0;
 
     states.forEach(s => {
-      positions.push(s.position.x);
-      positions.push(s.position.y);
-      positions.push(s.position.z);
+      var verts = createQuad(s.position, 3);
+      positions = positions.concat(verts);
+      vertices += 6;
     })
+
+    this.vertices = vertices;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.posBuffer);
 
@@ -116,4 +119,24 @@ export interface Vec2 {
 export interface SpriteRenderState extends RenderState {
   sprite: number,
   position: Vec
+}
+
+function createQuad(pos: Vec, size: number) {
+  var vertices: number[] = [];
+
+  function pushVert(x: number, y: number, z: number) {
+    vertices.push(x);
+    vertices.push(y);
+    vertices.push(z);
+  }
+
+  pushVert(pos.x, pos.y, pos.z); // a
+  pushVert(pos.x, pos.y + size, pos.z); // b
+  pushVert(pos.x + size, pos.y + size, pos.z); // c
+
+  pushVert(pos.x, pos.y, pos.z); // a
+  pushVert(pos.x + size, pos.y + size, pos.z); // c
+  pushVert(pos.x + size, pos.y, pos.z); // d
+
+  return vertices;
 }
