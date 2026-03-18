@@ -5,28 +5,26 @@ import { Renderer, RenderState } from './render/render';
 async function main() {
 
   try {
-    
-  
 
-  const renderer = new Renderer();
-  const scene = new SimpleScene();
+    const renderer = new Renderer();
+    const scene = new SimpleScene();
 
-  scene.addEntity(new SpriteEntity(0, 1, {x: 0, y: 0, z: 0}, {x: 0, y: 0, z: 0}));
-  scene.addEntity(new SpriteEntity(0, 1, {x: 2, y: 2, z: 0.8}, {x: 0, y: 0, z: 0}));
-  scene.addEntity(new SpriteEntity(0, 1, {x: 4, y: 4, z: -0.8}, {x: 0, y: 0, z: 0}));
+    scene.addEntity(new SpriteEntity(0, 1, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }));
+    scene.addEntity(new SpriteEntity(0, 1, { x: 2, y: 2, z: 0.8 }, { x: 0, y: 0, z: 0 }));
+    scene.addEntity(new SpriteEntity(0, 1, { x: 4, y: 4, z: -0.8 }, { x: 0, y: 0, z: 0 }));
 
-  const states: RenderState[] = [];
-  scene.extractStates(states);
+    const states: RenderState[] = [];
+    scene.extractStates(states);
 
-  renderer.upload();
-  
-  renderer.render();
+    renderer.upload();
 
-  var loop = true;
-  while (loop) {
-    await sleep(1000);
-    renderer.render()
-  }
+    renderer.render();
+
+    var loop = true;
+    while (loop) {
+      await sleep(1000);
+      renderer.render()
+    }
 
   } catch (error) {
     console.error(error);
