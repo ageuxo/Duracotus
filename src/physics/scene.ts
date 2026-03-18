@@ -22,4 +22,8 @@ export class SimpleScene {
     return states;
   }
 
+  public addEntity(entity: Entity) {
+    this.entities.push(entity);
+  }
+
 }
