@@ -11,10 +11,10 @@ interface AtlasSize {
 export class SpriteRenderer {
   spriteSize: AtlasSize;
   sheetSize: AtlasSize;
-  program: WebGLProgram;
-  posBuffer: WebGLBuffer;
-  vao: WebGLVertexArrayObject;
-  vertices: number;
+  program: WebGLProgram = -1;
+  posBuffer: WebGLBuffer = -1;
+  vao: WebGLVertexArrayObject = -1;
+  vertices: number = 0;
 
   constructor(spriteSize: number, sheetSize: number) {
     this.spriteSize = {
@@ -45,9 +45,22 @@ export class SpriteRenderer {
   init(renderer: Renderer) {
     const gl = renderer.gl;
     const vertexShader = renderer.createShader(gl.VERTEX_SHADER, vertSource);
+    if (!vertexShader) {
+      throw new Error("Failed constructing vertexShader!");
+      return;
+    }
     const fragShader = renderer.createShader(gl.FRAGMENT_SHADER, fragSource);
+    if (!fragShader) {
+      throw new Error("Failed constructing fragShader!");
+      return;
+    }
 
-    this.program = renderer.createProgram(vertexShader, fragShader);
+    var program = renderer.createProgram(vertexShader, fragShader);
+    if (!program) {
+      throw new Error("Failed constructing Program!");
+      return;
+    }
+    this.program = program;
 
     this.posBuffer = gl.createBuffer();
     var posAttrib = gl.getAttribLocation(this.program, "position");
@@ -69,7 +82,7 @@ export class SpriteRenderer {
   upload(renderer: Renderer, states: SpriteRenderState[]) {
     var gl = renderer.gl;
 
-    var positions: number[];
+    var positions: number[] = [];
 
     states.forEach(s => {
       positions.push(s.position.x);

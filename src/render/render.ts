@@ -1,6 +1,4 @@
-
 import { SpriteRenderer, SpriteRenderState } from "./spriteRender";
-
 
 export interface RenderState {
   type: string;
@@ -12,8 +10,13 @@ export class Renderer {
   states: RenderState[] = [];
   spriteRenderer = new SpriteRenderer(32, 128);
 
-  public init() {
-    this.setupGL();
+  constructor() {
+    var { gl, canvas } = this.setupGL();
+    this.gl = gl;
+    this.canvas = canvas;
+
+    this.gl.clearColor(0, 0, 0, 1);
+
     this.resizeCanvas();
     document.addEventListener("resize", ()=> this.resizeCanvas() );
 
@@ -40,25 +43,21 @@ export class Renderer {
   }
 
   public render() {
+    this.clearViewport();
     this.spriteRenderer.render(this);
   }
 
   public setupGL() {
     const canvas: HTMLCanvasElement | null = document.querySelector("#gl-canvas");
     if (canvas === null) {
-      alert("Failure in setup. Unable to locate canvas!");
-      return;
+      throw new Error("Failure in setup. Unable to locate canvas!");
     }
-    this.canvas = canvas;
     const gl = canvas.getContext("webgl2");
     if (gl === null) {
-      alert("Failed initializing WebGL. Your browser or machine may not support it.");
-      return;
+      throw new Error("Failed initializing WebGL. Your browser or machine may not support it.");
     }
-    this.gl = gl;
 
-    this.gl.clearColor(0, 0, 0, 1);
-    this.clearViewport();
+    return {gl, canvas};
   }
 
   public resizeCanvas() {
@@ -74,6 +73,9 @@ export class Renderer {
 
   public createShader(type: GLenum, source: string) {
     var shader = this.gl.createShader(type);
+    if (!shader) {
+      throw new Error("Failed constructing shader!");
+    }
     this.gl.shaderSource(shader, source);
     this.gl.compileShader(shader);
 
@@ -82,8 +84,9 @@ export class Renderer {
     if (success) {
       return shader;
     } else {
-      console.log(this.gl.getShaderInfoLog(shader));
+      var error = this.gl.getShaderInfoLog(shader);
       this.gl.deleteShader(shader);
+      throw new Error(`Failed compiling shader: ${error}`);
     }
   }
 
@@ -99,8 +102,9 @@ export class Renderer {
     if (success) {
       return program;
     } else {
-      console.log(this.gl.getProgramInfoLog(program));
+      var error = this.gl.getProgramInfoLog(program);
       this.gl.deleteProgram(program);
+      throw new Error(`Failed linking program: ${error}`);
     }
     
   }

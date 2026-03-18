@@ -2,7 +2,7 @@ import { RenderState } from "../render/render";
 import { Entity } from "./entities";
 
 export class SimpleScene {
-  entities: Entity[];
+  entities: Entity[] = [];
 
   /**
    * Run physics logic
