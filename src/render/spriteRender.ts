@@ -45,17 +45,20 @@ export class SpriteRenderer {
   init(renderer: Renderer) {
     const gl = renderer.gl;
     const vertexShader = renderer.createShader(gl.VERTEX_SHADER, vertSource);
+    renderer.tagObj(vertexShader, 'spriteVert');
     if (!vertexShader) {
       throw new Error("Failed constructing vertexShader!");
       return;
     }
     const fragShader = renderer.createShader(gl.FRAGMENT_SHADER, fragSource);
+    renderer.tagObj(fragShader, 'spriteFrag');
     if (!fragShader) {
       throw new Error("Failed constructing fragShader!");
       return;
     }
 
-    var program = renderer.createProgram(vertexShader, fragShader);
+    const program = renderer.createProgram(vertexShader, fragShader);
+    renderer.tagObj(program, 'spriteProgram');
     if (!program) {
       throw new Error("Failed constructing Program!");
       return;
@@ -63,12 +66,9 @@ export class SpriteRenderer {
     this.program = program;
 
     this.posBuffer = gl.createBuffer();
+    renderer.tagObj(this.posBuffer, 'spritePos');
     var posAttrib = gl.getAttribLocation(this.program, "position");
     gl.enableVertexAttribArray(posAttrib);
-
-    this.vao = gl.createVertexArray();
-    gl.bindVertexArray(this.vao);
-
 
     var size = 3;
     var type = gl.FLOAT;
@@ -76,6 +76,10 @@ export class SpriteRenderer {
     var stride = 0;
     var offset = 0;
     gl.vertexAttribPointer(posAttrib, size, type, normalize, stride, offset);
+
+    this.vao = gl.createVertexArray();
+    renderer.tagObj(this.vao, 'spriteVAO');
+    gl.bindVertexArray(this.vao);
 
   }
 
@@ -93,6 +97,8 @@ export class SpriteRenderer {
 
     this.vertices = vertices;
 
+    gl.bindVertexArray(this.vao);
+
     gl.bindBuffer(gl.ARRAY_BUFFER, this.posBuffer);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -105,7 +111,9 @@ export class SpriteRenderer {
 
     gl.bindVertexArray(this.vao);
 
-    gl.drawArrays(gl.TRIANGLES, 0, this.vertices);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.posBuffer);
+
+    gl.drawArrays(gl.LINES, 0, this.vertices);
   }
   
 

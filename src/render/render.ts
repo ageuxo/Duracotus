@@ -9,11 +9,16 @@ export class Renderer {
   gl: WebGL2RenderingContext;
   states: RenderState[] = [];
   spriteRenderer = new SpriteRenderer(32, 128);
+  tagObj: (object: any, name: string) => void;
+  lintExt: any;
 
   constructor() {
     var { gl, canvas } = this.setupGL();
     this.gl = gl;
     this.canvas = canvas;
+
+    this.lintExt = gl.getExtension("GMAN_debug_helper");
+    this.tagObj = this.lintExt ? this.lintExt.tagObject : () => {};
 
     this.gl.clearColor(0, 0, 0, 1);
 
@@ -24,10 +29,10 @@ export class Renderer {
 
   }
 
-  public upload() {
+  public upload(allStates: RenderState[]) {
     const sprites: SpriteRenderState[] = [];
 
-    this.states.forEach(s => {
+    allStates.forEach(s => {
       switch (s.type) {
         case "sprite":
           sprites.push(s as SpriteRenderState);
@@ -45,6 +50,9 @@ export class Renderer {
   public render() {
     this.clearViewport();
     this.spriteRenderer.render(this);
+    /* const info = this.lintExt.getAndResetRedundantCallInfo();
+    console.log(JSON.stringify(info)); */
+    requestAnimationFrame(()=>this.render());
   }
 
   public setupGL() {

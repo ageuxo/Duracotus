@@ -1,6 +1,7 @@
 import { SpriteEntity } from './physics/entities';
 import { SimpleScene } from './physics/scene';
 import { Renderer, RenderState } from './render/render';
+import './utils/webgl-lint'
 
 async function main() {
 
@@ -16,15 +17,9 @@ async function main() {
     const states: RenderState[] = [];
     scene.extractStates(states);
 
-    renderer.upload();
+    renderer.upload(states);
 
     renderer.render();
-
-    var loop = true;
-    while (loop) {
-      await sleep(1000);
-      renderer.render()
-    }
 
   } catch (error) {
     console.error(error);
