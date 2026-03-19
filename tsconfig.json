@@ -5,8 +5,11 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": true
   },
   "display": "Recommended",
-  "$schema": "https://www.schemastore.org/tsconfig"
+  "$schema": "https://www.schemastore.org/tsconfig",
+  "include": ["src/**/*"]
 }
