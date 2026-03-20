@@ -1,25 +1,20 @@
-import { SpriteEntity } from './physics/entities';
 import { SimpleScene } from './physics/scene';
-import { Renderer, RenderState } from './render/render';
-import './utils/webgl-lint'
+import { render, RenderCtx } from './render/render';
+import { createSceneProgram } from './render/sceneRender';
+import { createBuffers } from "./render/buffers";
 
 async function main() {
 
   try {
 
-    const renderer = new Renderer();
+    const ctx = new RenderCtx();
     const scene = new SimpleScene();
 
-    scene.addEntity(new SpriteEntity(0, 1, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }));
-    scene.addEntity(new SpriteEntity(0, 1, { x: 2, y: 2, z: 0.8 }, { x: 0, y: 0, z: 0 }));
-    scene.addEntity(new SpriteEntity(0, 1, { x: 4, y: 4, z: -0.8 }, { x: 0, y: 0, z: 0 }));
+    const sceneProgram = createSceneProgram(ctx);
 
-    const states: RenderState[] = [];
-    scene.extractStates(states);
+    const buffers = createBuffers(ctx);
 
-    renderer.upload(states);
-
-    renderer.render();
+    render(ctx, sceneProgram, buffers);
 
   } catch (error) {
     console.error(error);
@@ -34,10 +29,5 @@ function sleep(ms: number) {
   return new Promise(res => setTimeout(res, ms));
 }
 
-
-
-
-
-
-
+// ENTRY POINT
 document.addEventListener("DOMContentLoaded", main);

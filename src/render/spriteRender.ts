@@ -1,5 +1,5 @@
 import { Vec } from "../physics/physics";
-import { Renderer, RenderState } from "./render";
+import { RenderState } from "./render";
 import vertSource from './sprite.vert';
 import fragSource from './sprite.frag';
 
@@ -66,6 +66,7 @@ export class SpriteRenderer {
     this.program = program;
 
     this.posBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.posBuffer);
     renderer.tagObj(this.posBuffer, 'spritePos');
     var posAttrib = gl.getAttribLocation(this.program, "position");
     gl.enableVertexAttribArray(posAttrib);
