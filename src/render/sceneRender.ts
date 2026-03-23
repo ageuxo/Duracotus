@@ -67,7 +67,7 @@ export function drawScene({ gl, canvas }: GLContext & CanvasContext, programInfo
     modelViewMatrix
   );
 
-  gl.drawArrays(gl.TRIANGLES, 0, 4);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 
 function setPositionAttribute(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {
