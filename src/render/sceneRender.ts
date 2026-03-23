@@ -3,7 +3,7 @@ import { createShader, createProgram, ProgramInfo } from "./shaders";
 import vertSource from './scene.vert';
 import fragSource from './scene.frag';
 import { Buffers } from "./buffers";
-import { CanvasContext, GLContext } from "./render";
+import { CanvasContext, GLContext, Renderer } from "./render";
 
 export function createSceneProgram(ctx: GLContext) {
   const { gl } = ctx;
@@ -27,7 +27,9 @@ export function createSceneProgram(ctx: GLContext) {
 
 }
 
-export function drawScene({ gl, canvas }: GLContext & CanvasContext, programInfo: ProgramInfo, buffers: Buffers) {
+export function drawScene({ gl, canvas }: GLContext & CanvasContext, renderer: Renderer) {
+  const { buffers, program: programInfo} = renderer;
+
   gl.clearColor(0, 0, 0, 1);
   gl.clearDepth(1);
   gl.enable(gl.DEPTH_TEST);
@@ -67,7 +69,7 @@ export function drawScene({ gl, canvas }: GLContext & CanvasContext, programInfo
     modelViewMatrix
   );
 
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  gl.drawArrays(gl.TRIANGLES, 0, renderer.vertices);
 }
 
 function setPositionAttribute(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {

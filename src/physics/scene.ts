@@ -1,5 +1,6 @@
-import { RenderState } from "../render/render";
+import { createTriangle } from "../render/shapes";
 import { Entity } from "./entities";
+import { Vec } from "./physics";
 
 export class SimpleScene {
   entities: Entity[] = [];
@@ -11,15 +12,27 @@ export class SimpleScene {
     // Do all the stuff
   }
 
-  public extractStates(states: RenderState[]) {
+  public extractVertices() {
+    const vertices: number[] = [];
 
-    this.entities.forEach((e, i) => {
-      if (e.stateNeedsUpdate()) {
-        states[i] = e.extractRenderState();
-      }
+    function pushVert({ x, y, z }: { x: number, y: number, z: number }) {
+      vertices.push(x);
+      vertices.push(y);
+      vertices.push(z);
+    }
+
+    function pushVerts(verts: Vec[]) {
+      verts.forEach(e => {
+        pushVert(e);
+      })
+    }
+
+    this.entities.forEach((e) => {
+      const verts = createTriangle(e.getPos());
+      verts.forEach(v => vertices.push(v));
     })
 
-    return states;
+    return vertices;
   }
 
   public addEntity(entity: Entity) {

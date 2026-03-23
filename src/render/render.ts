@@ -1,4 +1,5 @@
-import { Buffers } from "./buffers";
+import { SimpleScene } from "../physics/scene";
+import { Buffers, uploadFloatBuffer } from "./buffers";
 import { drawScene } from "./sceneRender";
 import { ProgramInfo } from "./shaders";
 
@@ -59,12 +60,31 @@ export class RenderCtx implements GLContext, CanvasContext, DebugContext {
   }
 }
 
-export function render(ctx: RenderCtx, program: ProgramInfo, buffers: Buffers) {
+export class Renderer {
+  vertices: number = 0;
+  program: ProgramInfo;
+  buffers: Buffers;
+
+  constructor(program: ProgramInfo, buffers: Buffers) {
+    this.program = program;
+    this.buffers = buffers;
+  }
+
+  public uploadData({ gl }: GLContext, scene: SimpleScene) {
+    const vertices = scene.extractVertices();
+    this.vertices = Math.floor(vertices.length / 3);
+    uploadFloatBuffer(gl, this.buffers.position, vertices);
+  }
+
+}
+
+export function render(ctx: RenderCtx, renderer: Renderer, scene: SimpleScene) {
+  renderer.uploadData(ctx, scene);
   // Render everything
-  drawScene(ctx, program, buffers)
+  drawScene(ctx, renderer);
 
   if (ctx.loopRendering) {
-    requestAnimationFrame(()=> render(ctx, program, buffers) );
+    requestAnimationFrame(()=> render(ctx, renderer, scene) );
   }
 
 }

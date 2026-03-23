@@ -6,20 +6,14 @@ export type Buffers = {
 
 export function createBuffers({ gl }: GLContext) {
   const buffers: Buffers = {
-    position: createPosBuffer(gl)
+    position: gl.createBuffer()
   }
 
   return buffers;
 }
 
-export function createPosBuffer(gl: WebGL2RenderingContext) {
-  const positionBuf = gl.createBuffer();
+export function uploadFloatBuffer(gl: WebGL2RenderingContext, buf: WebGLBuffer, data: number[]) {
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuf);
-
-  const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
-
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-  return positionBuf;
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
 }
