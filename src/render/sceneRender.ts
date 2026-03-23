@@ -67,11 +67,11 @@ export function drawScene({ gl, canvas }: GLContext & CanvasContext, programInfo
     modelViewMatrix
   );
 
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  gl.drawArrays(gl.TRIANGLES, 0, 4);
 }
 
 function setPositionAttribute(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {
-  const numComponents = 2; // pull out 2 values per iteration
+  const numComponents = 3; // three floats per triangle
   const type = gl.FLOAT;
   const normalize = false;
   const stride = 0;
