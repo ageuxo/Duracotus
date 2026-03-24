@@ -1,6 +1,5 @@
 import { SimpleScene } from "../physics/scene";
 import { Buffers, uploadFloatBuffer } from "./buffers";
-import { drawScene } from "./sceneRender";
 import { ProgramInfo } from "./shaders";
 
 export interface RenderState {
@@ -74,17 +73,6 @@ export class Renderer {
     const vertices = scene.extractVertices();
     this.vertices = Math.floor(vertices.length / 3);
     uploadFloatBuffer(gl, this.buffers.position, vertices);
-  }
-
-}
-
-export function render(ctx: RenderCtx, renderer: Renderer, scene: SimpleScene) {
-  renderer.uploadData(ctx, scene);
-  // Render everything
-  drawScene(ctx, renderer);
-
-  if (ctx.loopRendering) {
-    requestAnimationFrame(()=> render(ctx, renderer, scene) );
   }
 
 }

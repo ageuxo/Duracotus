@@ -4,12 +4,20 @@ import { Vec } from "./physics";
 
 export class SimpleScene {
   entities: Entity[] = [];
+  lastUpdate: number = 0;
 
   /**
    * Run physics logic
    */
-  public update() {
-    // Do all the stuff
+  public update(now: number) {
+    const t = now;// - this.lastUpdate;
+
+    this.entities.forEach(e => {
+      const old = e.getPos();
+      const velocity = e.getVelocity();
+      const delta = { x: velocity.x * t, y: velocity.y * t, z: velocity.z * t };
+      e.setPos({x: old.x + delta.x, y: old.y + delta.y , z: old.z + delta.z })
+    })
   }
 
   public extractVertices() {

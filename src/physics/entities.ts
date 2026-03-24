@@ -4,6 +4,7 @@ import { Vec } from "./physics";
 export interface Entity {
   getMass(): number;
   getPos(): Vec;
+  setPos(pos: Vec): void;
   getVelocity(): Vec;
 }
 
@@ -17,12 +18,14 @@ export class SimpleEntity implements Entity {
     this.pos = pos;
     this.velocity = velocity;
   }
-
   getMass(): number {
     return this.mass;
   }
   getPos(): Vec {
     return this.pos;
+  }
+  setPos(pos: Vec): void {
+    this.pos = pos;
   }
   getVelocity(): Vec {
     return this.velocity;
