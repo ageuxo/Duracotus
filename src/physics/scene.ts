@@ -1,6 +1,6 @@
+import { vec3 } from "gl-matrix";
 import { createTriangle } from "../render/shapes";
 import { Entity } from "./entities";
-import { Vec } from "./physics";
 
 export class SimpleScene {
   entities: Entity[] = [];
@@ -15,21 +15,21 @@ export class SimpleScene {
     this.entities.forEach(e => {
       const old = e.getPos();
       const velocity = e.getVelocity();
-      const delta = { x: velocity.x * t, y: velocity.y * t, z: velocity.z * t };
-      e.setPos({x: old.x + delta.x, y: old.y + delta.y , z: old.z + delta.z })
+      const delta = [ velocity[0] * t, velocity[1] * t, velocity[2] * t ];
+      e.setPos([old[0] + delta[0], old[1] + delta[1] , old[2] + delta[2] ])
     })
   }
 
   public extractVertices() {
     const vertices: number[] = [];
 
-    function pushVert({ x, y, z }: { x: number, y: number, z: number }) {
+    function pushVert([ x, y, z ]: vec3) {
       vertices.push(x);
       vertices.push(y);
       vertices.push(z);
     }
 
-    function pushVerts(verts: Vec[]) {
+    function pushVerts(verts: vec3[]) {
       verts.forEach(e => {
         pushVert(e);
       })

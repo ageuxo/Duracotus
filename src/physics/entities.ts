@@ -1,33 +1,32 @@
+import { vec3 } from "gl-matrix";
 import { SpriteRenderState } from "../render/spriteRender";
-import { Vec } from "./physics";
 
 export interface Entity {
   getMass(): number;
-  getPos(): Vec;
-  setPos(pos: Vec): void;
-  getVelocity(): Vec;
+  getPos(): vec3;
+  setPos(pos: vec3): void;
+  getVelocity(): vec3;
 }
 
 export class SimpleEntity implements Entity {
   mass: number;
-  pos: Vec;
-  velocity: Vec;
+  pos: vec3;
+  velocity = vec3.create();
 
-  constructor(mass: number, pos: Vec, velocity: Vec) {
+  constructor(mass: number, pos: vec3) {
     this.mass = mass;
     this.pos = pos;
-    this.velocity = velocity;
   }
   getMass(): number {
     return this.mass;
   }
-  getPos(): Vec {
+  getPos(): vec3 {
     return this.pos;
   }
-  setPos(pos: Vec): void {
-    this.pos = pos;
+  setPos(pos: vec3): void {
+    this.pos = pos
   }
-  getVelocity(): Vec {
+  getVelocity(): vec3 {
     return this.velocity;
   }
 }
@@ -36,8 +35,8 @@ export class SpriteEntity extends SimpleEntity {
   spriteId: number;
   hasChanged: boolean;
 
-  constructor(spriteId: number, mass: number, pos: Vec, velocity: Vec) {
-    super(mass, pos, velocity);
+  constructor(spriteId: number, mass: number, pos: vec3) {
+    super(mass, pos);
     this.spriteId = spriteId;
     this.hasChanged = true;
   }
@@ -45,10 +44,10 @@ export class SpriteEntity extends SimpleEntity {
   getMass(): number {
     return this.mass;
   }
-  getPos(): Vec {
+  getPos(): vec3 {
     return this.pos;
   }
-  getVelocity(): Vec {
+  getVelocity(): vec3 {
     return this.velocity;
   }
   getSpriteId() {

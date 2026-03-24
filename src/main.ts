@@ -12,8 +12,8 @@ async function main() {
     const scene = new SimpleScene();
     const sceneRenderer = new Renderer(createSceneProgram(ctx), createBuffers(ctx));
 
-    scene.addEntity(new SimpleEntity(1, {x: 1, y: 1, z: 1}, {x: 0, y: 0, z: 0}));
-    scene.addEntity(new SimpleEntity(1, {x: 1.5, y: 0.5, z: 0}, {x: 0.1, y: 0.1, z: 0}));
+    scene.addEntity(new SimpleEntity(1, [1, 1, 1]));
+    scene.addEntity(new SimpleEntity(1, [1.5, 0.5, 0]));
 
     updateLoop(ctx, sceneRenderer, scene, 0);
 
