@@ -1,3 +1,4 @@
+import { mat4 } from "gl-matrix";
 import { SimpleScene } from "../physics/scene";
 import { Buffers, uploadFloatBuffer } from "./buffers";
 import { ProgramInfo } from "./shaders";
@@ -63,6 +64,11 @@ export class Renderer {
   vertices: number = 0;
   program: ProgramInfo;
   buffers: Buffers;
+  perspectiveMatrix = mat4.create();
+  modelViewMatrix = mat4.create();
+  fov = (45 * Math.PI) / 180;
+  zNear = 0.1;
+  zFar = 100.0;
 
   constructor(program: ProgramInfo, buffers: Buffers) {
     this.program = program;

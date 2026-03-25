@@ -37,22 +37,6 @@ export function drawScene({ gl, canvas }: GLContext & CanvasContext, renderer: R
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  const fov = (45 * Math.PI) / 180;
-  const aspect = canvas.clientWidth / canvas.clientHeight;
-  const zNear = 0.1;
-  const zFar = 100.0;
-  const projectionMatrix = mat4.create();
-
-  mat4.perspective(projectionMatrix, fov, aspect, zNear, zFar);
-
-  const modelViewMatrix = mat4.create();
-
-  mat4.translate(
-    modelViewMatrix,
-    modelViewMatrix,
-    [-0.0, 0.0, -6.0]
-  );
-
   setPositionAttribute(gl, buffers, programInfo);
 
   gl.useProgram(programInfo.program);
@@ -60,16 +44,36 @@ export function drawScene({ gl, canvas }: GLContext & CanvasContext, renderer: R
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.projectionMatrix,
     false,
-    projectionMatrix
+    renderer.perspectiveMatrix
   );
 
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.modelViewMatrix,
     false,
-    modelViewMatrix
+    renderer.modelViewMatrix
   );
 
   gl.drawArrays(gl.TRIANGLES, 0, renderer.vertices);
+}
+
+export function setupMatrices({ canvas }: CanvasContext, renderer: Renderer) {
+  mat4.identity(renderer.perspectiveMatrix);
+  mat4.identity(renderer.modelViewMatrix);
+
+  const aspect = canvas.clientWidth / canvas.clientHeight;
+  mat4.perspective(renderer.perspectiveMatrix, renderer.fov, aspect, renderer.zNear, renderer.zFar);
+
+  mat4.translate(
+    renderer.modelViewMatrix,
+    renderer.modelViewMatrix,
+    [-0.0, 0.0, -6.0]
+  );
+
+  mat4.scale(
+    renderer.modelViewMatrix,
+    renderer.modelViewMatrix,
+    [0.5, 0.5, 0.5]
+  )
 }
 
 function setPositionAttribute(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {
