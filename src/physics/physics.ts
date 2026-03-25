@@ -2,7 +2,7 @@ import { vec3 } from "gl-matrix";
 import { Entity } from "./entities"
 
 const G = 0.002;
-const softening = 0.00001; // Softening to avoid infinite forces at close distances.
+const softening = 0.001; // Softening to avoid infinite forces at close distances.
 
 const vecA = vec3.create();
 const vecB = vec3.create();
