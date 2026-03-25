@@ -6,6 +6,7 @@ export interface Entity {
   getPos(): vec3;
   setPos(pos: vec3): void;
   getVelocity(): vec3;
+  applyForce(force: vec3): void;
 }
 
 export class SimpleEntity implements Entity {
@@ -28,6 +29,11 @@ export class SimpleEntity implements Entity {
   }
   getVelocity(): vec3 {
     return this.velocity;
+  }
+  applyForce(force: vec3) {
+    const acceleration = vec3.create();
+    vec3.scale(acceleration, force, 1 / this.mass);
+    vec3.add(this.velocity, this.velocity, acceleration);
   }
 }
 

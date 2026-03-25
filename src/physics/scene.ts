@@ -1,6 +1,8 @@
 import { vec3 } from "gl-matrix";
 import { createTriangle } from "../render/shapes";
 import { Entity } from "./entities";
+import { applyGravity } from "./physics";
+import { forEachPair } from "../main";
 
 export class SimpleScene {
   entities: Entity[] = [];
@@ -9,8 +11,9 @@ export class SimpleScene {
   /**
    * Run physics logic
    */
-  public update(now: number) {
-    const t = now;// - this.lastUpdate;
+  public update(t: number) {
+    
+    forEachPair(this.entities, applyGravity);
 
     this.entities.forEach(e => {
       const old = e.getPos();

@@ -1,6 +1,6 @@
 import { SimpleScene } from './physics/scene';
 import { RenderCtx, Renderer } from './render/render';
-import { createSceneProgram, drawScene } from './render/sceneRender';
+import { createSceneProgram, drawScene, setupMatrices } from './render/sceneRender';
 import { createBuffers } from "./render/buffers";
 import { SimpleEntity } from './physics/entities';
 
@@ -11,6 +11,7 @@ async function main() {
     const ctx = new RenderCtx();
     const scene = new SimpleScene();
     const sceneRenderer = new Renderer(createSceneProgram(ctx), createBuffers(ctx));
+    setupMatrices(ctx, sceneRenderer);
 
     scene.addEntity(new SimpleEntity(1, [1, 1, 1]));
     scene.addEntity(new SimpleEntity(1, [1.5, 0.5, 0]));
@@ -45,6 +46,14 @@ export function updateLoop(ctx: RenderCtx, renderer: Renderer, scene: SimpleScen
    */
 function sleep(ms: number) {
   return new Promise(res => setTimeout(res, ms));
+}
+
+export function forEachPair(array: any[], callback: (a: any, b: any) => void) {
+    for (let i = 0; i < array.length; i++) {
+        for (let j = i + 1; j < array.length; j++) {
+            callback(array[i], array[j]);
+        }
+    }
 }
 
 // ENTRY POINT
