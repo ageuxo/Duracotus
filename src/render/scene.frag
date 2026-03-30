@@ -2,7 +2,7 @@
 
 precision highp float;
 
-flat in int index;
+in vec4 colour;
 
 out vec4 outColour;
 
@@ -27,5 +27,5 @@ vec3 colorFromIndex(int idx) {
 }
 
 void main(){  
-  outColour = vec4(colorFromIndex(index), 1.0);
+  outColour = colour;
 }

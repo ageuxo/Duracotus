@@ -3,6 +3,7 @@ import { createNGon, createTriangle } from "../render/shapes";
 import { Entity } from "./entities";
 import { applyGravity } from "./physics";
 import { forEachPair } from "../main";
+import { colorFromIndex, colourArray } from "../render/colour";
 
 export class SimpleScene {
   entities: Entity[] = [];
@@ -23,27 +24,20 @@ export class SimpleScene {
     })
   }
 
-  public extractVertices() {
+  public extractRenderData() {
     const vertices: number[] = [];
 
-    function pushVert([ x, y, z ]: vec3) {
-      vertices.push(x);
-      vertices.push(y);
-      vertices.push(z);
-    }
-
-    function pushVerts(verts: vec3[]) {
-      verts.forEach(e => {
-        pushVert(e);
-      })
-    }
-
+    const n = 9;
     this.entities.forEach((e) => {
-      const verts = createNGon(e.getPos(), 9, e.getMass());
+      const verts = createNGon(e.getPos(), n, e.getMass());
+      
       verts.forEach(v => vertices.push(v));
     })
 
-    return vertices;
+    return {
+      vertices,
+      colours: colourArray(this.entities.length, n)
+    };
   }
 
   public addEntity(entity: Entity) {

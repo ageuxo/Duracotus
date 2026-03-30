@@ -82,9 +82,10 @@ export class Renderer {
   }
 
   public uploadData({ gl }: GLContext, scene: SimpleScene) {
-    const vertices = scene.extractVertices();
+    const { vertices, colours } = scene.extractRenderData();
     this.vertices = Math.floor(vertices.length / 3);
     uploadFloatBuffer(gl, this.buffers.position, vertices);
+    uploadFloatBuffer(gl, this.buffers.colour, colours);
   }
 
 }
