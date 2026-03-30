@@ -1,5 +1,5 @@
 import { vec3 } from "gl-matrix";
-import { createTriangle } from "../render/shapes";
+import { createNGon, createTriangle } from "../render/shapes";
 import { Entity } from "./entities";
 import { applyGravity } from "./physics";
 import { forEachPair } from "../main";
@@ -39,7 +39,7 @@ export class SimpleScene {
     }
 
     this.entities.forEach((e) => {
-      const verts = createTriangle(e.getPos());
+      const verts = createNGon(e.getPos(), 9, e.getMass());
       verts.forEach(v => vertices.push(v));
     })
 
