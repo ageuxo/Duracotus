@@ -1,3 +1,4 @@
+import { Buffers } from "./buffers";
 
 export function createShader(gl: WebGL2RenderingContext, type: GLenum, source: string) {
   const shader = gl.createShader(type);
@@ -37,16 +38,24 @@ export function createProgram(gl: WebGL2RenderingContext, vertShader: WebGLShade
 
 }
 
-type AttributeLocations = {
-  [key: string]: number;
-};
+export interface AttributeInfo {
+  location: GLuint,
+  buffer: keyof Buffers,
+  type: GLenum,
+  numComponents: number,
+  normalise: boolean,
+  stride: number,
+  offset: number
+}
 
-type UniformLocations = {
+export type UniformLocations = {
   [key: string]: WebGLUniformLocation
 }
 
 export interface ProgramInfo {
   program: WebGLProgram;
-  attribLocations: AttributeLocations;
   uniformLocations: UniformLocations;
+  attributes: {
+    [key: string]: AttributeInfo;
+  }
 };

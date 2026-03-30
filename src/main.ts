@@ -11,6 +11,8 @@ async function main() {
     const ctx = new RenderCtx();
     const scene = new SimpleScene();
     const sceneRenderer = new Renderer(createSceneProgram(ctx), createBuffers(ctx));
+    sceneRenderer.init(ctx);
+    
     setupMatrices(ctx, sceneRenderer);
 
     scene.addEntity(new SimpleEntity(1, [1, 1, 1]));

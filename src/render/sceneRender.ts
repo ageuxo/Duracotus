@@ -14,8 +14,25 @@ export function createSceneProgram(ctx: GLContext) {
 
   const sceneProgram: ProgramInfo = {
     program: program,
-    attribLocations: {
-      vertexPosition: gl.getAttribLocation(program, "aVertexPosition")
+    attributes: {
+      position: {
+        location: gl.getAttribLocation(program, "aVertexPosition"),
+        buffer: 'position',
+        type: gl.FLOAT,
+        numComponents: 3,
+        normalise: false,
+        stride: 0,
+        offset: 0
+      },
+      colour: {
+        location: gl.getAttribLocation(program, "aVertexColour"),
+        buffer: 'colour',
+        type: gl.FLOAT,
+        numComponents: 4,
+        normalise: false,
+        stride: 0,
+        offset: 0
+      }
     },
     uniformLocations: {
       projectionMatrix: gl.getUniformLocation(program, "uProjectionMatrix")!,
@@ -36,8 +53,6 @@ export function drawScene({ gl, canvas }: GLContext & CanvasContext, renderer: R
   gl.depthFunc(gl.LEQUAL);
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  setPositionAttribute(gl, buffers, programInfo);
 
   gl.useProgram(programInfo.program);
 
@@ -76,20 +91,28 @@ export function setupMatrices({ canvas }: CanvasContext, renderer: Renderer) {
   )
 }
 
-function setPositionAttribute(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {
-  const numComponents = 3; // three floats per triangle
-  const type = gl.FLOAT;
-  const normalize = false;
-  const stride = 0;
-  const offset = 0;
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+export function setUpAttributes(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {
+  for (const attribute in programInfo.attributes) {
+    setUpAttribute(gl, buffers, programInfo, attribute);
+  }
+}
+
+export function enableAttributes(gl: WebGL2RenderingContext, programInfo: ProgramInfo) {
+  for (const attribute in programInfo.attributes) {
+    gl.enableVertexAttribArray(programInfo.attributes[attribute].location);
+  }
+}
+
+function setUpAttribute(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo, attributeKey: keyof ProgramInfo['attributes']) {
+  const { location, buffer, type, numComponents, normalise, stride, offset } = programInfo.attributes[attributeKey];
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers[buffer]);
   gl.vertexAttribPointer(
-    programInfo.attribLocations.vertexPosition,
+    location,
     numComponents,
     type,
-    normalize,
+    normalise,
     stride,
     offset,
   );
-  gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 }

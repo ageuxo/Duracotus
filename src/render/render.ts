@@ -2,6 +2,7 @@ import { mat4 } from "gl-matrix";
 import { SimpleScene } from "../physics/scene";
 import { Buffers, uploadFloatBuffer } from "./buffers";
 import { ProgramInfo } from "./shaders";
+import { enableAttributes, setUpAttributes } from "./sceneRender";
 
 export interface RenderState {
   type: string;
@@ -73,6 +74,11 @@ export class Renderer {
   constructor(program: ProgramInfo, buffers: Buffers) {
     this.program = program;
     this.buffers = buffers;
+  }
+
+  public init({ gl }: GLContext) {
+    setUpAttributes(gl, this.buffers, this.program);
+    enableAttributes(gl, this.program);
   }
 
   public uploadData({ gl }: GLContext, scene: SimpleScene) {
