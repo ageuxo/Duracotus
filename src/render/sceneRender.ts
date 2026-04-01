@@ -55,6 +55,7 @@ export function drawScene({ gl, canvas }: GLContext & CanvasContext, renderer: R
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   gl.useProgram(programInfo.program);
+  gl.bindVertexArray(programInfo.vertexArrayObj);
 
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.projectionMatrix,
@@ -92,6 +93,7 @@ export function setupMatrices({ canvas }: CanvasContext, renderer: Renderer) {
 }
 
 export function setUpAttributes(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {
+  gl.bindVertexArray(programInfo.vao);
   for (const attribute in programInfo.attributes) {
     setUpAttribute(gl, buffers, programInfo, attribute);
   }

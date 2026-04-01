@@ -54,6 +54,7 @@ export type UniformLocations = {
 
 export interface ProgramInfo {
   program: WebGLProgram;
+  vertexArrayObj: WebGLVertexArrayObject;
   uniformLocations: UniformLocations;
   attributes: {
     [key: string]: AttributeInfo;
