@@ -93,7 +93,7 @@ export function setupMatrices({ canvas }: CanvasContext, renderer: Renderer) {
 }
 
 export function setUpAttributes(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {
-  gl.bindVertexArray(programInfo.vao);
+  gl.bindVertexArray(programInfo.vertexArrayObj);
   for (const attribute in programInfo.attributes) {
     setUpAttribute(gl, buffers, programInfo, attribute);
   }
