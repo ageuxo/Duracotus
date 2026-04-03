@@ -70,7 +70,7 @@ export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer)
     renderer.modelViewMatrix
   );
 
-  gl.drawArrays(gl.TRIANGLES, 0, renderer.vertices);
+  gl.drawElements(gl.TRIANGLES, renderer.vertices, gl.UNSIGNED_SHORT, 0);
 }
 
 export function setupMatrices({ canvas }: CanvasContext, renderer: Renderer) {
