@@ -28,43 +28,29 @@ export function createTriangle([ x, y, z ]: vec3) {
   return vertices;
 }
 
-export function createNGon([ x, y, z ]: vec3, n: number, radius: number) {
-  const points: vec3[] = [];
+export function createNGon(n: number, radius: number) {
+  const vertices: vec3[] = [];
+  const indices: number[] = [];
 
+  // make origin
+  vertices.push([0, 0, 0]);
   for (let i = 0; i < n; i++) {
     const point: vec3 = [
-      (x + radius * Math.cos(i * 2 * Math.PI / n)),
-      (y + radius * Math.sin(i * 2 * Math.PI / n)),
-      z
+      (radius * Math.cos(i * 2 * Math.PI / n)),
+      (radius * Math.sin(i * 2 * Math.PI / n)),
+      0
     ];
-    points.push(point);
-  }
-
-  const vertices: number[] = [];
-
-  function pushVert([ x, y, z ]: vec3) {
-    vertices.push(x);
-    vertices.push(y);
-    vertices.push(z);
-  }
-
-  function fromIdx(idx: number) {
-    if (idx < 0) {
-      idx = idx + points.length;
-    }
-    return points[idx];
+    vertices.push(point);
   }
 
   // Make a triangle fan from the center of the circle
-  for (let idx = 0; idx < points.length; idx++) {
-    const v0: vec3 = fromIdx(idx - 1);
-    const v1: vec3 = [x, y, z];
-    const v2: vec3 = fromIdx(idx);
+  for (let idx = 1; idx < vertices.length; idx++) {
+    const v0 = idx;
+    const v1 = 0;
+    const v2 = idx + 1;
 
-    pushVert(v0);
-    pushVert(v1);
-    pushVert(v2);
+    indices.push(v0, v1, v2);
   }
 
-  return vertices;
+  return { vertices, indices };
 }
