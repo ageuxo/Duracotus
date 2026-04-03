@@ -14,6 +14,7 @@ export function createSceneProgram(ctx: GLContext) {
 
   const sceneProgram: ProgramInfo = {
     program: program,
+    vertexArrayObj: gl.createVertexArray(),
     attributes: {
       position: {
         location: gl.getAttribLocation(program, "aVertexPosition"),
