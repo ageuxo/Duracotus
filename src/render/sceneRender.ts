@@ -45,8 +45,8 @@ export function createSceneProgram(ctx: GLContext) {
 
 }
 
-export function drawScene({ gl, canvas }: GLContext & CanvasContext, renderer: Renderer) {
-  const { buffers, program: programInfo} = renderer;
+export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer) {
+  const { program: programInfo} = renderer;
 
   gl.clearColor(0, 0, 0, 1);
   gl.clearDepth(1);
