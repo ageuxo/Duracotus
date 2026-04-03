@@ -34,6 +34,7 @@ export function updateLoop(ctx: RenderCtx, renderer: Renderer, scene: SimpleScen
   scene.update(deltaTime);
 
   renderer.uploadData(ctx, scene);
+  renderer.updateTransforms(scene);
   // Render everything
   drawScene(ctx, renderer);
 

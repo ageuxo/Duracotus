@@ -1,9 +1,12 @@
-import { vec3 } from "gl-matrix";
+import { mat4, quat, vec3 } from "gl-matrix";
 import { SpriteRenderState } from "../render/spriteRender";
 
 export interface Entity {
   getMass(): number;
   getPos(): vec3;
+  getScale(): vec3;
+  getRotation(): quat;
+  makeTransform(): mat4;
   setPos(pos: vec3): void;
   getVelocity(): vec3;
   applyForce(force: vec3): void;
@@ -12,11 +15,25 @@ export interface Entity {
 export class SimpleEntity implements Entity {
   mass: number;
   pos: vec3;
+  scale: vec3;
+  rotation: quat;
+  transform: mat4 = mat4.create();
   velocity = vec3.create();
 
-  constructor(mass: number, pos: vec3) {
+  constructor(mass: number, pos: vec3, scale: vec3 = [1, 1, 1], rotation: quat = quat.create() ) {
     this.mass = mass;
     this.pos = pos;
+    this.scale = scale;
+    this.rotation = rotation;
+  }
+  getScale(): vec3 {
+    return this.scale;
+  }
+  getRotation(): quat {
+    return this.rotation;
+  }
+  makeTransform(): mat4 {
+    return mat4.fromRotationTranslationScale(this.transform, this.getRotation(), this.getPos(), this.getScale())
   }
   getMass(): number {
     return this.mass;

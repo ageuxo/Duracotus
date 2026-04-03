@@ -3,7 +3,6 @@ import { Entity } from "./entities";
 import { applyGravity } from "./physics";
 import { forEachPair } from "../main";
 import { colorFromIndex } from "../render/colour";
-import { DrawElement } from "../render/sceneRender";
 
 export class SimpleScene {
   entities: Entity[] = [];
@@ -28,7 +27,6 @@ export class SimpleScene {
     const vertices: number[] = [];
     const indices: number[] = [];
     const colours: number[] = [];
-    const elements: DrawElement[] = [];
 
     let offset = 0;
 
@@ -42,11 +40,6 @@ export class SimpleScene {
       });
       inds.forEach(i => indices.push(i + offset));
 
-      elements.push({
-        transformIdx: i,
-        indicesOffset: offset,
-        numIndices: inds.length
-      })
       offset += verts.length;
     })
 
@@ -54,7 +47,6 @@ export class SimpleScene {
       vertices,
       indices,
       colours,
-      elements
     };
   }
 

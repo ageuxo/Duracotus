@@ -67,6 +67,7 @@ export class Renderer {
   buffers: Buffers;
   perspectiveMatrix = mat4.create();
   modelViewMatrix = mat4.create();
+  entityTransforms: mat4[] = [];
   fov = (45 * Math.PI) / 180;
   zNear = 0.1;
   zFar = 100.0;
@@ -91,6 +92,13 @@ export class Renderer {
 
     uploadFloatBuffer(gl, this.buffers.position, vertices);
     uploadFloatBuffer(gl, this.buffers.colour, colours);
+  }
+
+  public updateTransforms(scene: SimpleScene) {
+    this.entityTransforms = [];
+    for (let entity of scene.entities) {
+      this.entityTransforms.push(entity.makeTransform());
+    }
   }
 
 }
