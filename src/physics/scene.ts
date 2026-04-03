@@ -1,9 +1,9 @@
-import { vec3 } from "gl-matrix";
-import { createNGon, createTriangle } from "../render/shapes";
+import { createNGon } from "../render/shapes";
 import { Entity } from "./entities";
 import { applyGravity } from "./physics";
 import { forEachPair } from "../main";
-import { colorFromIndex, colourArray } from "../render/colour";
+import { colorFromIndex } from "../render/colour";
+import { DrawElement } from "../render/sceneRender";
 
 export class SimpleScene {
   entities: Entity[] = [];
@@ -26,17 +26,35 @@ export class SimpleScene {
 
   public extractRenderData() {
     const vertices: number[] = [];
+    const indices: number[] = [];
+    const colours: number[] = [];
+    const elements: DrawElement[] = [];
+
+    let offset = 0;
 
     const n = 9;
-    this.entities.forEach((e) => {
-      const verts = createNGon(e.getPos(), n, e.getMass());
-      
-      verts.forEach(v => vertices.push(v));
+    this.entities.forEach((e, i) => {
+      const { vertices: verts, indices: inds } = createNGon(n, 1);
+      const colour = colorFromIndex(i);
+      verts.forEach(v => {
+        vertices.push(v[0], v[1], v[2]);
+        colours.push(...colour, 1); // rgb + a
+      });
+      inds.forEach(i => indices.push(i + offset));
+
+      elements.push({
+        transformIdx: i,
+        indicesOffset: offset,
+        numIndices: inds.length
+      })
+      offset += verts.length;
     })
 
     return {
       vertices,
-      colours: colourArray(this.entities.length, n)
+      indices,
+      colours,
+      elements
     };
   }
 
