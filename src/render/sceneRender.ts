@@ -67,7 +67,7 @@ export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer)
   gl.uniformMatrix4fv(
     uniforms.get('viewMatrix'),
     false,
-    renderer.modelViewMatrix
+    renderer.viewMatrix
   );
 
   gl.drawElements(gl.TRIANGLES, renderer.drawCount, gl.UNSIGNED_SHORT, 0);
@@ -75,20 +75,20 @@ export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer)
 
 export function setupMatrices({ canvas }: CanvasContext, renderer: Renderer) {
   mat4.identity(renderer.perspectiveMatrix);
-  mat4.identity(renderer.modelViewMatrix);
+  mat4.identity(renderer.viewMatrix);
 
   const aspect = canvas.clientWidth / canvas.clientHeight;
   mat4.perspective(renderer.perspectiveMatrix, renderer.fov, aspect, renderer.zNear, renderer.zFar);
 
   mat4.translate(
-    renderer.modelViewMatrix,
-    renderer.modelViewMatrix,
+    renderer.viewMatrix,
+    renderer.viewMatrix,
     [-0.0, 0.0, -6.0]
   );
 
   mat4.scale(
-    renderer.modelViewMatrix,
-    renderer.modelViewMatrix,
+    renderer.viewMatrix,
+    renderer.viewMatrix,
     [0.5, 0.5, 0.5]
   )
 }

@@ -66,6 +66,7 @@ export class Renderer {
   program: ProgramInfo;
   buffers: Buffers;
   perspectiveMatrix = mat4.create();
+  viewMatrix = mat4.create();
   modelViewMatrix = mat4.create();
   entityTransforms: mat4[] = [];
   fov = (45 * Math.PI) / 180;
