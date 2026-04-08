@@ -59,6 +59,8 @@ export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer)
   gl.useProgram(programInfo.program);
   gl.bindVertexArray(programInfo.vertexArrayObj);
 
+  uploadEntityTransforms(gl, renderer);
+
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.projectionMatrix,
     false,
@@ -119,4 +121,11 @@ function setUpAttribute(gl: WebGL2RenderingContext, buffers: Buffers, programInf
     stride,
     offset,
   );
+}
+
+function uploadEntityTransforms(gl: WebGL2RenderingContext, renderer: Renderer) {
+  const count = Math.min(renderer.entityTransforms.length, 100); // MAX_TRANSFORMS as in scene.vert
+  for (let i = 0; i < count; i++) {
+    gl.uniformMatrix4fv(renderer.program.uniforms.get("transforms", i), false, new Float32Array(renderer.entityTransforms[i]));
+  }
 }
