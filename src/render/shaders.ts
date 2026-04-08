@@ -48,14 +48,9 @@ export interface AttributeInfo {
   offset: number
 }
 
-export type UniformLocations = {
-  [key: string]: WebGLUniformLocation
-}
-
 export interface ProgramInfo {
   program: WebGLProgram;
   vertexArrayObj: WebGLVertexArrayObject;
-  uniformLocations: UniformLocations;
   uniforms: UniformLookup;
   attributes: {
     [key: string]: AttributeInfo;
