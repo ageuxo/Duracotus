@@ -56,7 +56,56 @@ export interface ProgramInfo {
   program: WebGLProgram;
   vertexArrayObj: WebGLVertexArrayObject;
   uniformLocations: UniformLocations;
+  uniforms: UniformLookup;
   attributes: {
     [key: string]: AttributeInfo;
   }
 };
+
+export class UniformLookup {
+  program: WebGLProgram;
+  uniforms: {
+    [key: string]: WebGLUniformLocation
+  }
+
+  constructor(gl: WebGL2RenderingContext, program: WebGLProgram, uniforms: string[], uniformArrays: { name: string, count: number }[]) {
+    this.program = program;
+    this.uniforms = {};
+
+    uniforms.forEach(u => {
+      this.bindUniform(gl, u);
+    });
+
+    uniformArrays.forEach(u => {
+      this.bindUniformArray(gl, u.name, u.count);
+    })
+  }
+
+  public get(name: string, idx?: number) {
+    const key = typeof idx == 'number' ? `${name}[${idx}]` : name;
+    const cached = this.uniforms[key];
+    if (cached == null) {
+        throw new Error(`Attempted looking up unbound uniform '${key}'!`);
+    }
+    return cached;
+  }
+
+  public bindUniform(gl: WebGL2RenderingContext, name: string) {
+    const location = gl.getUniformLocation(this.program, name);
+    if (location == null) {
+        throw new Error(`Attempted binding nonexistent uniform '${name}'!`);
+    }
+    this.uniforms[name] = location;
+  }
+
+  public bindUniformArray(gl: WebGL2RenderingContext, name: string, count: number) {
+    for (let i = 0; i < count; i++) {
+      const key = `${name}[${i}]`;
+      const location = gl.getUniformLocation(this.program, key);
+      if (location == null) {
+        throw new Error(`Attempted binding nonexistent uniform with index '${i}' in array '${key}'!`);
+      }
+      this.uniforms[key] = location;
+    }
+  }
+}

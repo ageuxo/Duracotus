@@ -1,5 +1,5 @@
 import { mat4 } from "gl-matrix";
-import { createShader, createProgram, ProgramInfo } from "./shaders";
+import { createShader, createProgram, ProgramInfo, UniformLookup } from "./shaders";
 import vertSource from './scene.vert';
 import fragSource from './scene.frag';
 import { Buffers } from "./buffers";
@@ -38,7 +38,8 @@ export function createSceneProgram(ctx: GLContext) {
     uniformLocations: {
       projectionMatrix: gl.getUniformLocation(program, "uProjectionMatrix")!,
       modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")!,
-    }
+    },
+    uniforms: new UniformLookup(gl, program, ["uProjectionMatrix", "uModelViewMatrix"], [{ name: "transforms", count: 100 }]),
   }
 
   return sceneProgram;
