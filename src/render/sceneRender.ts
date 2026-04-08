@@ -17,7 +17,7 @@ export function createSceneProgram(ctx: GLContext) {
     vertexArrayObj: gl.createVertexArray(),
     attributes: {
       position: {
-        location: gl.getAttribLocation(program, "aVertexPosition"),
+        location: gl.getAttribLocation(program, "vertexPosition"),
         buffer: 'position',
         type: gl.FLOAT,
         numComponents: 3,
@@ -26,7 +26,7 @@ export function createSceneProgram(ctx: GLContext) {
         offset: 0
       },
       colour: {
-        location: gl.getAttribLocation(program, "aVertexColour"),
+        location: gl.getAttribLocation(program, "vertexColour"),
         buffer: 'colour',
         type: gl.FLOAT,
         numComponents: 4,
@@ -35,11 +35,7 @@ export function createSceneProgram(ctx: GLContext) {
         offset: 0
       }
     },
-    uniformLocations: {
-      projectionMatrix: gl.getUniformLocation(program, "uProjectionMatrix")!,
-      modelViewMatrix: gl.getUniformLocation(program, "uModelViewMatrix")!,
-    },
-    uniforms: new UniformLookup(gl, program, ["uProjectionMatrix", "uModelViewMatrix"], [{ name: "transforms", count: 100 }]),
+    uniforms: new UniformLookup(gl, program, ["projectionMatrix", "viewMatrix"], [{ name: "transforms", count: 100 }]),
   }
 
   return sceneProgram;
@@ -61,14 +57,15 @@ export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer)
 
   uploadEntityTransforms(gl, renderer);
 
+  const uniforms = programInfo.uniforms;
   gl.uniformMatrix4fv(
-    programInfo.uniformLocations.projectionMatrix,
+    uniforms.get('projectionMatrix'),
     false,
     renderer.perspectiveMatrix
   );
 
   gl.uniformMatrix4fv(
-    programInfo.uniformLocations.modelViewMatrix,
+    uniforms.get('viewMatrix'),
     false,
     renderer.modelViewMatrix
   );
