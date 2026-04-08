@@ -35,7 +35,7 @@ export function createSceneProgram(ctx: GLContext) {
         offset: 0
       }
     },
-    uniforms: new UniformLookup(gl, program, ["projectionMatrix", "viewMatrix"], [{ name: "transforms", count: 100 }]),
+    uniforms: new UniformLookup(gl, program, ["projectionMatrix", "modelViewMatrix"], []),
   }
 
   return sceneProgram;
@@ -43,7 +43,7 @@ export function createSceneProgram(ctx: GLContext) {
 }
 
 export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer) {
-  const { program: programInfo} = renderer;
+  const { program: programInfo } = renderer;
 
   gl.clearColor(0, 0, 0, 1);
   gl.clearDepth(1);
@@ -55,8 +55,6 @@ export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer)
   gl.useProgram(programInfo.program);
   gl.bindVertexArray(programInfo.vertexArrayObj);
 
-  uploadEntityTransforms(gl, renderer);
-
   const uniforms = programInfo.uniforms;
   gl.uniformMatrix4fv(
     uniforms.get('projectionMatrix'),
@@ -64,13 +62,15 @@ export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer)
     renderer.perspectiveMatrix
   );
 
-  gl.uniformMatrix4fv(
-    uniforms.get('viewMatrix'),
-    false,
-    renderer.viewMatrix
-  );
+  renderer.drawElements.forEach((el) => {
+    gl.uniformMatrix4fv(
+      uniforms.get('modelViewMatrix'),
+      false,
+      mat4.mul(renderer.modelViewMatrix, renderer.viewMatrix, renderer.entityTransforms[el.transformIdx])
+    );
 
-  gl.drawElements(gl.TRIANGLES, renderer.drawCount, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, el.idxCount, gl.UNSIGNED_SHORT, el.byteOffset);
+  })
 }
 
 export function setupMatrices({ canvas }: CanvasContext, renderer: Renderer) {

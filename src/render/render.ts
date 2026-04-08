@@ -62,6 +62,7 @@ export class RenderCtx implements GLContext, CanvasContext, DebugContext {
 }
 
 export class Renderer {
+  drawElements: DrawElement[] = [];
   drawCount: number = 0;
   program: ProgramInfo;
   buffers: Buffers;
@@ -84,8 +85,9 @@ export class Renderer {
   }
 
   public uploadData({ gl }: GLContext, scene: SimpleScene) {
-    const { vertices, indices, colours } = scene.extractRenderData();
+    const { drawElements, vertices, indices, colours } = scene.extractRenderData();
     this.drawCount = indices.length;
+    this.drawElements = drawElements;
     
     // Upload indices
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
@@ -102,4 +104,10 @@ export class Renderer {
     }
   }
 
+}
+
+export interface DrawElement {
+  idxCount: number;
+  byteOffset: number;
+  transformIdx: number;
 }
