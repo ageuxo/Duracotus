@@ -44,6 +44,7 @@ export function createNGon(n: number, radius: number) {
   }
 
   // Make a triangle fan from the center of the circle
+  indices.push(vertices.length - 1, 0, 1);
   for (let idx = 1; idx < vertices.length; idx++) {
     const v0 = idx;
     const v1 = 0;
