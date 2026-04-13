@@ -6,6 +6,7 @@ import { colorFromIndex } from "../render/colour";
 import { DrawElement } from "../render/render";
 
 export class SimpleScene {
+  paused: boolean = false;
   entities: Entity[] = [];
   lastUpdate: number = 0;
 
@@ -13,6 +14,10 @@ export class SimpleScene {
    * Run physics logic
    */
   public update(t: number) {
+
+    if (this.paused) {
+      return;
+    }
     
     forEachPair(this.entities, applyGravity);
 
