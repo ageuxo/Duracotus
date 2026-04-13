@@ -63,7 +63,6 @@ export class RenderCtx implements GLContext, CanvasContext, DebugContext {
 
 export class Renderer {
   drawElements: DrawElement[] = [];
-  drawCount: number = 0;
   program: ProgramInfo;
   buffers: Buffers;
   perspectiveMatrix = mat4.create();
@@ -86,7 +85,6 @@ export class Renderer {
 
   public uploadData({ gl }: GLContext, scene: SimpleScene) {
     const { drawElements, vertices, indices, colours } = scene.extractRenderData();
-    this.drawCount = indices.length;
     this.drawElements = drawElements;
     
     // Upload indices
