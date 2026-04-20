@@ -54,6 +54,27 @@ export class InputHandler {
     canvas.addEventListener("keyup", (e)=> this.handleKeyboardEvent(e));
   }
 
+  public addBinding(key: KeyCode, binding: Binding) {
+    if (this.bindings[key] == null) {
+      this.bindings[key] = [];
+    }
+
+    this.bindings[key].push(binding);
+  }
+
+  public removeBinding(key: KeyCode, binding: Binding) {
+    if (this.bindings[key] == null) {
+      throw new Error(`Attempted removing nonexistent binding '${binding.keybind}' for key '${key}'`);
+    }
+    
+    const found = this.bindings[key].findIndex((b)=> b.keybind == binding.keybind);
+    if (found < 0) {
+      throw new Error(`Attempted removing nonexistent binding '${binding.keybind}' for key '${key}'`);
+    } else {
+      this.bindings[key].splice(found, 1)
+    }
+  }
+
   public addListenerSet(set: KeyListenerSet) {
     this.listeners.push(set);
   }
