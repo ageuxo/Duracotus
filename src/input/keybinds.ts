@@ -11,7 +11,7 @@ export class KeySets {
 
 function simulationKeybinds(scene: SimpleScene) {
   return new KeyListenerSet('simulation', {
-    Space: (s) => {
+    'sim.pause': (s) => {
       if (s == "Down") {
         scene.paused = !scene.paused;
       }
