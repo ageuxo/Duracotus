@@ -130,7 +130,7 @@ export class KeyListenerSet {
   }
 
   public trigger(key: Keybind, state: Keystate) {
-    if (Object.hasOwn(this, key)) {
+    if (Object.hasOwn(this.bindings, key)) {
       this.bindings[key](state);
     }
   }
