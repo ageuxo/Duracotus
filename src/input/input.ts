@@ -49,9 +49,9 @@ export class InputHandler {
 
   constructor({ canvas }: CanvasContext) {
     makeCanvasFocusable(canvas);
-    canvas.addEventListener("keydown", ()=> this.handleKeyboardEvent);
-    canvas.addEventListener("keypress", ()=> this.handleKeyboardEvent);
-    canvas.addEventListener("keyup", ()=> this.handleKeyboardEvent);
+    canvas.addEventListener("keydown", (e)=> this.handleKeyboardEvent(e));
+    canvas.addEventListener("keypress", (e)=> this.handleKeyboardEvent(e));
+    canvas.addEventListener("keyup", (e)=> this.handleKeyboardEvent(e));
   }
 
   public addListenerSet(set: KeyListenerSet) {
