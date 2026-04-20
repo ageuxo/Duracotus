@@ -3,6 +3,8 @@ import { RenderCtx, Renderer } from './render/render';
 import { createSceneProgram, drawScene, setupMatrices } from './render/sceneRender';
 import { createBuffers } from "./render/buffers";
 import { SimpleEntity } from './physics/entities';
+import { InputHandler } from './input/input';
+import { KeySets } from './input/keybinds';
 
 async function main() {
 
@@ -12,6 +14,10 @@ async function main() {
     const scene = new SimpleScene();
     const sceneRenderer = new Renderer(createSceneProgram(ctx), createBuffers(ctx));
     sceneRenderer.init(ctx);
+
+    const inputHandler = new InputHandler(ctx);
+    const keySets = new KeySets(scene);
+    inputHandler.addListenerSet(keySets.simulation);
     
     setupMatrices(ctx, sceneRenderer);
 
