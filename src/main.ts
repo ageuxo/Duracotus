@@ -18,6 +18,7 @@ async function main() {
     const inputHandler = new InputHandler(ctx);
     const keySets = new KeySets(scene);
     inputHandler.addListenerSet(keySets.simulation);
+    addKeyBindings(inputHandler);
     
     setupMatrices(ctx, sceneRenderer);
 
@@ -48,6 +49,20 @@ export function updateLoop(ctx: RenderCtx, renderer: Renderer, scene: SimpleScen
     requestAnimationFrame((t) => updateLoop(ctx, renderer, scene, t));
   }
 
+}
+
+function addKeyBindings(inputHandler: InputHandler) {
+  inputHandler.addBinding('Space', {
+      keybind: 'sim.pause',
+      modifiers: [
+        {
+          Control: false,
+          Alt: false,
+          Shift: false,
+          Meta: false
+        }
+      ]
+    });
 }
 
 /**
