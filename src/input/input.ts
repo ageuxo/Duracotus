@@ -48,6 +48,7 @@ export class InputHandler {
   listeners: KeyListenerSet[] = [];
 
   constructor({ canvas }: CanvasContext) {
+    makeCanvasFocusable(canvas);
     canvas.addEventListener("keydown", this.handleKeyboardEvent);
     canvas.addEventListener("keypress", this.handleKeyboardEvent);
     canvas.addEventListener("keyup", this.handleKeyboardEvent);
@@ -112,6 +113,11 @@ export class KeyListenerSet {
       this.bindings[key](state);
     }
   }
+}
+
+function makeCanvasFocusable(canvas: HTMLCanvasElement) {
+  canvas.focus();
+  canvas.addEventListener('click', ()=> canvas.focus() );
 }
 
 
