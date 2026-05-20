@@ -2,7 +2,6 @@ import { mat4 } from "gl-matrix";
 import { createShader, createProgram, ProgramInfo, UniformLookup } from "./shaders";
 import vertSource from './scene.vert';
 import fragSource from './scene.frag';
-import { Buffers } from "./buffers";
 import { CanvasContext, GLContext, Renderer } from "./render";
 
 export function createSceneProgram(ctx: GLContext) {
@@ -71,53 +70,6 @@ export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer)
 
     gl.drawElements(gl.TRIANGLES, el.idxCount, gl.UNSIGNED_SHORT, el.byteOffset);
   })
-}
-
-export function setupMatrices({ canvas }: CanvasContext, renderer: Renderer) {
-  mat4.identity(renderer.perspectiveMatrix);
-  mat4.identity(renderer.viewMatrix);
-
-  const aspect = canvas.clientWidth / canvas.clientHeight;
-  mat4.perspective(renderer.perspectiveMatrix, renderer.fov, aspect, renderer.zNear, renderer.zFar);
-
-  mat4.translate(
-    renderer.viewMatrix,
-    renderer.viewMatrix,
-    [-0.0, 0.0, -6.0]
-  );
-
-  mat4.scale(
-    renderer.viewMatrix,
-    renderer.viewMatrix,
-    [0.5, 0.5, 0.5]
-  )
-}
-
-export function setUpAttributes(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo) {
-  gl.bindVertexArray(programInfo.vertexArrayObj);
-  for (const attribute in programInfo.attributes) {
-    setUpAttribute(gl, buffers, programInfo, attribute);
-  }
-}
-
-export function enableAttributes(gl: WebGL2RenderingContext, programInfo: ProgramInfo) {
-  for (const attribute in programInfo.attributes) {
-    gl.enableVertexAttribArray(programInfo.attributes[attribute].location);
-  }
-}
-
-function setUpAttribute(gl: WebGL2RenderingContext, buffers: Buffers, programInfo: ProgramInfo, attributeKey: keyof ProgramInfo['attributes']) {
-  const { location, buffer, type, numComponents, normalise, stride, offset } = programInfo.attributes[attributeKey];
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffers[buffer]);
-  gl.vertexAttribPointer(
-    location,
-    numComponents,
-    type,
-    normalise,
-    stride,
-    offset,
-  );
 }
 
 function uploadEntityTransforms(gl: WebGL2RenderingContext, renderer: Renderer) {

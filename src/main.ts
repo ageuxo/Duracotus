@@ -1,6 +1,7 @@
 import { SimpleScene } from './physics/scene';
 import { RenderCtx, Renderer } from './render/render';
-import { createSceneProgram, drawScene, setupMatrices } from './render/sceneRender';
+import { createSceneProgram, drawScene } from './render/sceneRender';
+import { setupMatrices } from "./render/render";
 import { createBuffers } from "./render/buffers";
 import { SimpleEntity } from './physics/entities';
 import { InputHandler } from './input/input';
