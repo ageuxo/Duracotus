@@ -3,14 +3,29 @@ import { createShader, createProgram, ProgramInfo, UniformLookup } from "./shade
 import vertSource from './scene.vert';
 import fragSource from './scene.frag';
 import { CanvasContext, GLContext, Renderer } from "./render";
-import { Buffers } from "./buffers";
+import { Buffers, uploadFloatBuffer } from "./buffers";
+import { SimpleScene } from "../physics/scene";
 
 export class SceneRenderer extends Renderer {
+  constructor(ctx: GLContext) {
+    super(createSceneProgram(ctx), createSceneBuffers(ctx));
+  }
+
   render(ctx: GLContext & CanvasContext): void {
     drawScene(ctx, this);
   }
-  constructor(ctx: GLContext) {
-    super(createSceneProgram(ctx), createSceneBuffers(ctx));
+
+  public uploadData(ctx: GLContext, scene: SimpleScene): void {
+    const { drawElements, vertices, indices, colours } = scene.extractRenderData();
+    const { gl } = ctx;
+    this.drawElements = drawElements;
+    
+    // Upload indices
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+    uploadFloatBuffer(gl, this.buffers.position, vertices);
+    uploadFloatBuffer(gl, this.buffers.colour, colours);
   }
 }
 

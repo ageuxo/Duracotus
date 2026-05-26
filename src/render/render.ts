@@ -82,18 +82,6 @@ export abstract class Renderer {
     enableAttributes(gl, this.program);
   }
 
-  public uploadData({ gl }: GLContext, scene: SimpleScene) {
-    const { drawElements, vertices, indices, colours } = scene.extractRenderData();
-    this.drawElements = drawElements;
-    
-    // Upload indices
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-
-    uploadFloatBuffer(gl, this.buffers.position, vertices);
-    uploadFloatBuffer(gl, this.buffers.colour, colours);
-  }
-
   public updateTransforms(scene: SimpleScene) {
     this.entityTransforms = [];
     for (let entity of scene.entities) {
@@ -105,7 +93,8 @@ export abstract class Renderer {
     setupMatrices(ctx, this);
   }
 
-  abstract render(gl: GLContext & CanvasContext): void;
+  abstract uploadData(ctx: GLContext, scene: SimpleScene): void;
+  abstract render(ctx: GLContext & CanvasContext): void;
 
 }
 
