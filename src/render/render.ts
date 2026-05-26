@@ -60,7 +60,7 @@ export class RenderCtx implements GLContext, CanvasContext, DebugContext {
   }
 }
 
-export class Renderer {
+export abstract class Renderer {
   drawElements: DrawElement[] = [];
   program: ProgramInfo;
   buffers: Buffers;
@@ -100,6 +100,12 @@ export class Renderer {
       this.entityTransforms.push(entity.makeTransform());
     }
   }
+
+  public setViewMatrices(ctx: CanvasContext) {
+    setupMatrices(ctx, this);
+  }
+
+  abstract render(gl: GLContext & CanvasContext): void;
 
 }
 

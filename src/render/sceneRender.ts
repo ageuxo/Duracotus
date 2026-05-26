@@ -3,6 +3,16 @@ import { createShader, createProgram, ProgramInfo, UniformLookup } from "./shade
 import vertSource from './scene.vert';
 import fragSource from './scene.frag';
 import { CanvasContext, GLContext, Renderer } from "./render";
+import { Buffers } from "./buffers";
+
+export class SceneRenderer extends Renderer {
+  render(ctx: GLContext & CanvasContext): void {
+    drawScene(ctx, this);
+  }
+  constructor(ctx: GLContext) {
+    super(createSceneProgram(ctx), createSceneBuffers(ctx));
+  }
+}
 
 export function createSceneProgram(ctx: GLContext) {
   const { gl } = ctx;
@@ -41,7 +51,18 @@ export function createSceneProgram(ctx: GLContext) {
 
 }
 
-export function drawScene({ gl }: GLContext & CanvasContext, renderer: Renderer) {
+function createSceneBuffers({ gl }: GLContext) {
+  const buffers: Buffers = {
+    position: gl.createBuffer(),
+    indices: gl.createBuffer(),
+    colour: gl.createBuffer()
+  }
+
+  return buffers;
+}
+
+function drawScene(ctx: GLContext & CanvasContext, renderer: Renderer) {
+  const { gl } = ctx;
   const { program: programInfo } = renderer;
 
   gl.clearColor(0, 0, 0, 1);
