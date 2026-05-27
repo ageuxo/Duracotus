@@ -8,7 +8,7 @@
   "main": "src/main.ts",
   "scripts": {
     "build": "esbuild src/main.ts --bundle --outfile=dist/index.js --loader:.vert=text --loader:.frag=text --loader:.png=file",
-    "dev": "esbuild src/main.ts --bundle --outfile=dist/index.js --watch --sourcemap --loader:.vert=text --loader:.frag=text --loader:.png=file"
+    "dev": "esbuild src/main.ts --bundle --outfile=dist/index.js --watch --servedir=dist --sourcemap --loader:.vert=text --loader:.frag=text --loader:.png=file"
   },
   "devDependencies": {
     "esbuild": "0.27.3"
