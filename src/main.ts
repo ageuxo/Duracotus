@@ -1,32 +1,34 @@
 import { SimpleScene } from './physics/scene';
 import { RenderCtx, Renderer } from './render/render';
-import { createSceneProgram, drawScene } from './render/sceneRender';
-import { setupMatrices } from "./render/render";
-import { createBuffers } from "./render/buffers";
 import { SimpleEntity } from './physics/entities';
 import { InputHandler } from './input/input';
 import { KeySets } from './input/keybinds';
+import { loadTexture } from './render/textures';
+import sprites from './sprites.png';
+import { SpriteRenderer } from './render/spriteRender';
 
 async function main() {
 
   try {
 
     const ctx = new RenderCtx();
+  
     const scene = new SimpleScene();
-    const sceneRenderer = new Renderer(createSceneProgram(ctx), createBuffers(ctx));
-    sceneRenderer.init(ctx);
+
+    const spriteRenderer = new SpriteRenderer(ctx);
+    spriteRenderer.init(ctx);
+
+    const atlas = loadTexture(ctx, sprites, spriteRenderer, scene);
 
     const inputHandler = new InputHandler(ctx);
     const keySets = new KeySets(scene);
     inputHandler.addListenerSet(keySets.simulation);
     addKeyBindings(inputHandler);
-    
-    setupMatrices(ctx, sceneRenderer);
 
     scene.addEntity(new SimpleEntity(1, [1, 1, 1]));
-    scene.addEntity(new SimpleEntity(1, [1.5, 0.5, 0]));
+    scene.addEntity(new SimpleEntity(1, [3.5, 1.75, 0]));
 
-    updateLoop(ctx, sceneRenderer, scene, 0);
+    updateLoop(ctx, spriteRenderer, scene, 0);
 
   } catch (error) {
     console.error(error);
@@ -43,8 +45,9 @@ export function updateLoop(ctx: RenderCtx, renderer: Renderer, scene: SimpleScen
 
   renderer.uploadData(ctx, scene);
   renderer.updateTransforms(scene);
+  renderer.setViewMatrices(ctx);
   // Render everything
-  drawScene(ctx, renderer);
+  renderer.render(ctx);
 
   if (ctx.loopRendering) {
     requestAnimationFrame((t) => updateLoop(ctx, renderer, scene, t));
