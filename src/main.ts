@@ -18,7 +18,7 @@ async function main() {
     const spriteRenderer = new SpriteRenderer(ctx);
     spriteRenderer.init(ctx);
 
-    const atlas = loadTexture(ctx, sprites, spriteRenderer, scene);
+    const atlas = loadTexture(ctx, sprites);
 
     const inputHandler = new InputHandler(ctx);
     const keySets = new KeySets(scene);

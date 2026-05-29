@@ -1,57 +1,11 @@
-import { updateLoop } from "../main";
-import { SimpleScene } from "../physics/scene";
-import { GLContext, RenderCtx, Renderer } from "./render";
-
-class Samplers {
-  samplers: Sampler[] = [];
-
-  public create(gl: WebGL2RenderingContext) {
-    return this.samplers.push(new Sampler(gl)) - 1;
-  }
-
-  public enable(gl: WebGL2RenderingContext, index: number) {
-    const sampler = this.get(index);
-
-    gl.activeTexture(gl.TEXTURE0 + index);
-
-
-    gl.bindTexture(gl.TEXTURE_2D, sampler.location);
-  }
-
-  private get(index: number) {
-    const sampler = this.samplers.at(index);
-    if (sampler == null) {
-      throw new Error(`Tried to get non-existent sampler: ${index}`);
-    }
-    return sampler;
-  }
-}
-
-class Sampler {
-  enabled: boolean = false;
-  location: WebGLTexture
-  
-  constructor(gl: WebGL2RenderingContext) {
-    this.location = gl.createTexture();
-  }
-
-  public init(gl: WebGL2RenderingContext) {
-    gl.bindTexture(gl.TEXTURE_2D, this.location);
-  }
-
-  public enable(gl: WebGL2RenderingContext, index: number) {
-    gl.activeTexture(gl.TEXTURE0 + index);
-    gl.bindTexture(gl.TEXTURE_2D, this.location);
-  }
-
-}
+import { RenderCtx } from "./render";
 
 interface Texture {
   location: WebGLTexture
   image: HTMLImageElement
 }
 
-export function loadTexture(ctx: RenderCtx, url: string, renderer: Renderer, scene: SimpleScene): Texture {
+export function loadTexture(ctx: RenderCtx, url: string): Texture {
   const { gl } = ctx;
   const location = gl.createTexture();
 
@@ -81,7 +35,6 @@ export function loadTexture(ctx: RenderCtx, url: string, renderer: Renderer, sce
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-    updateLoop(ctx, renderer, scene, 0)
   }
   image.src = url;
 
