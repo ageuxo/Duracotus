@@ -10,4 +10,7 @@ uniform sampler2D sampler;
 
 void main(){
   outColour = texture(sampler, vTexCoord);
+  if(outColour.a < 0.1) {
+    discard;
+  }
 }
