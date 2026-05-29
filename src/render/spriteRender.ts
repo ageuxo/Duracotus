@@ -119,6 +119,8 @@ export function drawSprites({ gl }: GLContext & CanvasContext, renderer: SpriteR
     gl.clearDepth(1);
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     renderer.isSetUp = true;
   }
